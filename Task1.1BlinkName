@@ -1,0 +1,38 @@
+int ledPin = LED_BUILTIN;
+
+void dot() {
+  digitalWrite(ledPin, HIGH);
+  delay(200);
+  digitalWrite(ledPin, LOW);
+  delay(200);
+}
+
+void dash() {
+  digitalWrite(ledPin, HIGH);
+  delay(600);
+  digitalWrite(ledPin, LOW);
+  delay(200);
+}
+
+void blinkChar(String code) {
+  for (int i = 0; i < code.length(); i++) {
+    if (code[i] == '.') dot();
+    else if (code[i] == '-') dash();
+  }
+  delay(700);
+}
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+
+void loop() {
+  blinkChar(".-");    // A
+  blinkChar(".-.");   // R
+  blinkChar("--");    // M
+  blinkChar(".-");    // A
+  blinkChar(".-");    // A
+  blinkChar("-.");    // N
+  delay(1500);
+}
+\
