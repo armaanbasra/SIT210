@@ -1,1 +1,47 @@
+#include <DHT.h>
 
+#define DHTPIN 2
+#define DHTTYPE DHT22
+#define LED_PIN 3
+#define BUZZER_PIN 4
+
+DHT dht(DHTPIN, DHTTYPE);
+float temperatureThreshold = 25.0;
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+  delay(2000);
+  pinMode(LED_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+  Serial.println("DHT22 Test Started");
+}
+
+void loop() {
+  float temperature = dht.readTemperature();
+  float humidity = dht.readHumidity();
+
+  if (isnan(temperature) || isnan(humidity)) {
+    Serial.println("Failed to read from DHT sensor!");
+    delay(2000);
+    return;
+  }
+
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.print(" °C\tHumidity: ");
+  Serial.print(humidity);
+  Serial.println(" %");
+
+  if (temperature >= temperatureThreshold) {
+    digitalWrite(LED_PIN, HIGH);
+    int buzzerVolume = map(temperature, temperatureThreshold, 50, 100, 255);
+    buzzerVolume = constrain(buzzerVolume, 100, 255);
+    analogWrite(BUZZER_PIN, buzzerVolume);
+  } else {
+    digitalWrite(LED_PIN, LOW);
+    analogWrite(BUZZER_PIN, 0);
+  }
+
+  delay(2000);
+}
