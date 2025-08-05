@@ -1,0 +1,60 @@
+#include "WiFiNINA.h"
+#include "DHT.h"
+#include "ThingSpeak.h"
+
+char ssid[] = "Airtel_Basra";
+char pass[] = "7355710101";
+WiFiClient client;
+
+unsigned long channelNumber = 3027057;
+const char * writeAPIKey = "X9A1BYRO3IW0NIPD";
+
+#define DHTPIN 2           
+#define DHTTYPE DHT22
+DHT dht(DHTPIN, DHTTYPE);
+
+unsigned long lastTime = 0;
+unsigned long interval = 20000; 
+
+void setup() {
+  Serial.begin(9600);
+  delay(1000);
+  dht.begin();
+
+  Serial.print("Connecting to WiFi");
+  while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+  Serial.println("\nConnected to WiFi");
+
+  ThingSpeak.begin(client);
+}
+
+void loop() {
+  if (millis() - lastTime >= interval) {
+    lastTime = millis();
+
+    float temp = dht.readTemperature();
+    float hum = dht.readHumidity();
+
+    if (isnan(temp) || isnan(hum)) {
+      Serial.println("Failed to read from DHT sensor!");
+      return;
+    }
+
+    Serial.print("Temp: "); Serial.print(temp);
+    Serial.print(" °C, Humidity: "); Serial.println(hum);
+
+    ThingSpeak.setField(1, temp);
+    ThingSpeak.setField(2, hum);
+
+    int status = ThingSpeak.writeFields(channelNumber, writeAPIKey);
+    if (status == 200) {
+      Serial.println("Data sent to ThingSpeak successfully");
+    } else {
+      Serial.print("Failed to send data. HTTP error code: ");
+      Serial.println(status);
+    }
+  }
+}
