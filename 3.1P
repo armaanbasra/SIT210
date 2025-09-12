@@ -1,0 +1,50 @@
+#include <Wire.h>
+#include <BH1750.h>
+#include <WiFiNINA.h>
+#include <ArduinoHttpClient.h>
+
+char ssid[] = "sukhi's";
+char pass[] = "123456789";
+
+const char* server = "maker.ifttt.com";
+String IFTTT_Key = "fHINeGtzRaIGzEB4B4Fu1wJ_G7gWkOxIJ-dppn4c-7g";
+String eventName = "Detected";
+
+WiFiClient wifi;
+HttpClient client(wifi, server, 80);
+BH1750 lightMeter;
+
+int thresholdLux = 300;
+
+void setup() {
+  Serial.begin(9600);
+  Wire.begin();
+  lightMeter.begin();
+
+  Serial.print("Connecting WiFi...");
+  while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
+    delay(2000);
+    Serial.print(".");
+  }
+  Serial.println("Connected!");
+}
+
+void loop() {
+  float lux = lightMeter.readLightLevel();
+  Serial.print("Light: "); Serial.println(lux);
+
+  if (lux > thresholdLux) {
+    sendIFTTT();
+    delay(60000);  
+  }
+
+  delay(5000);  
+}
+
+void sendIFTTT() {
+  String url = "/trigger/" + eventName + "/with/key/" + IFTTT_Key;
+  client.get(url);
+
+  int status = client.responseStatusCode();
+  Serial.print("Status: "); Serial.println(status);
+}
