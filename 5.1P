@@ -1,0 +1,60 @@
+import tkinter as tk
+from gpiozero import LED
+
+red = LED(27)
+green = LED(4)
+blue = LED(17)
+
+def control_led(selected):
+    """Turn ON the chosen LED and turn OFF others."""
+    red.off()
+    green.off()
+    blue.off()
+
+    if selected == "Red":
+        red.on()
+    elif selected == "Green":
+        green.on()
+    elif selected == "Blue":
+        blue.on()
+
+def close_app(root):
+    """Turn OFF all LEDs and close the window."""
+    red.off()
+    green.off()
+    blue.off()
+    root.destroy()
+
+def create_gui():
+    """Build and run the Tkinter GUI."""
+    root = tk.Tk()
+    root.title("LED Control")
+    root.title(""LED Control)
+    choice = tk.StringVar()
+
+    tk.Radiobutton(
+        root, text="Red LED", variable=choice, value="Red",
+        command=lambda: control_led(choice.get())
+    ).pack()
+
+    tk.Radiobutton(
+        root, text="Green LED", variable=choice, value="Green",
+        command=lambda: control_led(choice.get())
+    ).pack()
+
+    tk.Radiobutton(
+        root, text="Blue LED", variable=choice, value="Blue",
+        command=lambda: control_led(choice.get())
+    ).pack()
+
+    tk.Button(
+        root, text="Exit", command=lambda: close_app(root)
+    ).pack()
+
+    root.mainloop()
+
+    def main() :
+        create_gui()
+
+    if __name__== "__main__"
+        main()
