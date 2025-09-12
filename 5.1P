@@ -29,7 +29,6 @@ def create_gui():
     """Build and run the Tkinter GUI."""
     root = tk.Tk()
     root.title("LED Control")
-    root.title(""LED Control)
     choice = tk.StringVar()
 
     tk.Radiobutton(
