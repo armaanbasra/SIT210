@@ -6,7 +6,6 @@ green = LED(4)
 blue = LED(17)
 
 def control_led(selected):
-    """Turn ON the chosen LED and turn OFF others."""
     red.off()
     green.off()
     blue.off()
@@ -19,14 +18,12 @@ def control_led(selected):
         blue.on()
 
 def close_app(root):
-    """Turn OFF all LEDs and close the window."""
     red.off()
     green.off()
     blue.off()
     root.destroy()
 
 def create_gui():
-    """Build and run the Tkinter GUI."""
     root = tk.Tk()
     root.title("LED Control")
     choice = tk.StringVar()
