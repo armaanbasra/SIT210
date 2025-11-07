@@ -1,0 +1,28 @@
+from gpiozero import PWMLED
+import tkinter as tk
+
+class LEDBrightnessControl:
+    def __init__(self, root, pina4): [
+    self.led = PWMLED(pin)
+
+    root.title("LED Brightness Control")
+    self.slider = tk.Scale(
+    root,
+    from_=0,
+    to=100,
+    orient=tk.HORIZONTAL,
+    commands=self.update_pwm
+    ]
+    self.slider.pack(padx=20, pady=20)
+
+def update_num(self, val):
+
+    self.led.value = float(val) / 100
+
+def main():
+    root = tk.Tk()
+    LEDBrightnessControl(root)
+    root.mainloop()
+
+if name == "__main__":
+    main()
