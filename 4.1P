@@ -1,0 +1,13 @@
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BOARD)    # Use Physical pin numbering
+led = 3    # Pin number 3 on Raspberry Pi
+GPIO.setup(led, GPIO.OUT)   # Set Pin 3 as Output
+
+try:
+    while True:
+        GPIO.output(led, True)    # Turn LED ON
+        time.sleep(1)
+        GPIO.output(led, False)   # Turn LED OFF
+        time.sleep(1)
